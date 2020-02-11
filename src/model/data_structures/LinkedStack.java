@@ -22,7 +22,6 @@ public class LinkedStack <K> implements ILinkedStack<K>, Iterable <K>
 	}
 	
 	
-	@Override
 	public void push (Nodo <K> item) {
 		
 		if(primero == null)
@@ -43,7 +42,6 @@ public class LinkedStack <K> implements ILinkedStack<K>, Iterable <K>
 		
 	}
 
-	@Override
 	public Nodo <K> pop() throws noExisteObjetoException
 	{
 		if(tamano == 0)
@@ -82,7 +80,6 @@ public class LinkedStack <K> implements ILinkedStack<K>, Iterable <K>
 		}
 	}
 
-	@Override
 	public boolean isEmpty() {
 
 		boolean si = false;
@@ -95,13 +92,11 @@ public class LinkedStack <K> implements ILinkedStack<K>, Iterable <K>
 		return si;
 	}
 
-	@Override
 	public int size() {
 
 		return tamano;
 	}
 
-	@Override
 	public Nodo <K> darUltimo() throws noExisteObjetoException
 	{
 		if (ultimo == null)
@@ -113,7 +108,6 @@ public class LinkedStack <K> implements ILinkedStack<K>, Iterable <K>
 	}
 
 
-	@Override
 	public Iterator<K> iterator() {
 		// TODO Auto-generated method stub
 		return ultimo;

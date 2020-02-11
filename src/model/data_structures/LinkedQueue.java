@@ -23,7 +23,6 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 	}
 	
 	
-	@Override
 	public void enqueue(Nodo <K> item) {
 		
 		if(primero == null)
@@ -43,7 +42,6 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 		
 	}
 
-	@Override
 	public Nodo<K> dequeue() throws noExisteObjetoException
 	{
 		// TODO Auto-generated method stub
@@ -84,7 +82,6 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 		}
 	}
 
-	@Override
 	public boolean isEmpty() {
 		boolean si = false;
 		
@@ -96,14 +93,12 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 		return si;
 	}
 
-	@Override
 	public int size() {
 		
 		return tamano;
 	}
 
 
-	@Override
 	public Nodo<K> darPrimero() throws noExisteObjetoException
 	{
 		
@@ -118,7 +113,6 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 	}
 
 
-	@Override
 	public Iterator<K> iterator() {
 		// TODO Auto-generated method stub
 		return primero;

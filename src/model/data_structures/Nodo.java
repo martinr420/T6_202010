@@ -60,14 +60,12 @@ public class Nodo<K> implements Iterator<K>
 	}
 
 
-	@Override
 	public boolean hasNext() {
 		// TODO Auto-generated method stub
 		return this.siguiente != null;
 	}
 
 
-	@Override
 	public K next() {
 		// TODO Auto-generated method stub
 		return this.siguiente.darGenerico();

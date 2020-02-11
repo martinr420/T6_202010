@@ -6,6 +6,7 @@ import model.data_structures.IArregloDinamico;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.google.gson.JsonArray;
@@ -188,6 +189,16 @@ public class Modelo {
 	} //llave metodo
 
 
-	
+	public ArrayList<Multa> procesosarColarPorComparendo()
+	{
+		ArrayList<Multa> arreglo = new ArrayList<Multa>();
+		
+		
+		
+		
+		
+		return arreglo;
+		
+	}
 
 }//llave clase

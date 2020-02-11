@@ -54,14 +54,14 @@ public class LinkedQueue <K> implements ILinkedQueue <K>, Iterable <K>
 		}
 		else
 		{
-			Nodo<K> aEliminar = ultimo;
+			Nodo<K> aEliminar = primero;
 			
-			if(aEliminar.darAnterior() != null)
+			if(aEliminar.darSiguiente() != null)
 			{
 				
-				ultimo = aEliminar.darAnterior();
+				primero = aEliminar.darSiguiente();
 
-				ultimo.desconectarSiguiente();
+				primero.desconectarAnterior();
 				
 
 

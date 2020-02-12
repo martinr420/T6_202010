@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import model.logic.Modelo;
@@ -7,97 +8,104 @@ import view.View;
 
 public class Controller {
 
-	/* Instancia del Modelo*/
-	private Modelo modelo;
 	
-	/* Instancia de la Vista*/
-	private View view;
-	
-	/**
-	 * Crear la vista y el modelo del proyecto
-	 * @param capacidad tamaNo inicial del arreglo
-	 */
-	public Controller ()
-	{
-		view = new View();
-		modelo = new Modelo();
-	}
-		
-	public void run() 
-	{
-		Scanner lector = new Scanner(System.in);
-		boolean fin = false;
-		String dato = "";
-		String respuesta = "";
+	    // -------------------------------------------------------------
+	    // Attributes
+	    // -------------------------------------------------------------
 
-		while( !fin ){
-			view.printMenu();
+	    /**
+	     * A model.
+	     */
+	    private Modelo modelo;
 
-			int option = lector.nextInt();
-			switch(option){
-				case 1:
-					view.printMessage("--------- \nCrear Arreglo \nDar capacidad inicial del arreglo: ");
-				    int capacidad = lector.nextInt();
-				    modelo = new Modelo(capacidad); 
-				    view.printMessage("Arreglo Dinamico creado");
-				    view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-					break;
+	    /**
+	     * A view.
+	     */
+	    private View view;
 
-				case 2:
-					view.printMessage("--------- \nDar cadena (simple) a ingresar: ");
-					dato = lector.next();
-					modelo.agregar(dato);
-					view.printMessage("Dato agregado");
-					view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-					break;
+	    // -------------------------------------------------------------
+	    // Constructor
+	    // -------------------------------------------------------------
 
-				case 3:
-					view.printMessage("--------- \nDar cadena (simple) a buscar: ");
-					dato = lector.next();
-					respuesta = modelo.buscar(dato);
-					if ( respuesta != null)
-					{
-						view.printMessage("Dato encontrado: "+ respuesta);
-					}
-					else
-					{
-						view.printMessage("Dato NO encontrado");
-					}
-					view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-					break;
+	    /**
+	     * Creates the project view and the project model
+	     */
+	    public Controller() {
+	        modelo = new Modelo();
+	        view = new View();
+	    }
 
-				case 4:
-					view.printMessage("--------- \nDar cadena (simple) a eliminar: ");
-					dato = lector.next();
-					respuesta = modelo.eliminar(dato);
-					if ( respuesta != null)
-					{
-						view.printMessage("Dato eliminado "+ respuesta);
-					}
-					else
-					{
-						view.printMessage("Dato NO eliminado");							
-					}
-					view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-					break;
+	    // -------------------------------------------------------------
+	    // Methods
+	    // -------------------------------------------------------------
 
-				case 5: 
-					view.printMessage("--------- \nContenido del Arreglo: ");
-					view.printModelo(modelo);
-					view.printMessage("Numero actual de elementos " + modelo.darTamano() + "\n---------");						
-					break;	
-					
-				case 6: 
-					view.printMessage("--------- \n Hasta pronto !! \n---------"); 
-					lector.close();
-					fin = true;
-					break;	
+	    /**
+	     * Prints the user options and updates the view using the model.
+	     *
+	     * @throws InputMismatchException If the user inputs an incorrect number sequence.
+	     */
+	    public void run() throws InputMismatchException {
+	        try {
+	            Scanner reader = new Scanner(System.in);
+	            boolean end = false;
 
-				default: 
-					view.printMessage("--------- \n Opcion Invalida !! \n---------");
-					break;
-			}
-		}
-		
-	}	
+	            while (!end) {
+	                view.displayMenu();
+	                int option = reader.nextInt();
+	                switch (option) {
+
+	                    case 0:
+	                        // Display option 0
+	                        view.displayOp0Menu();
+
+	                        // read name from input
+	                        String name = reader.next();
+
+	                        // set name in model
+	                        modelo.setName(name);
+
+	                        // display name in view
+	                        view.displayOp0Data(name);
+	                        break;
+
+	                    case 1:
+	                        // Display option 1
+	                        view.displayOp1Menu();
+
+	                        // read age from input
+	                        int age = reader.nextInt();
+
+	                        // set age in model
+	                        model.setAge(age);
+
+	                        // display age in view
+	                        view.displayOp1Data(age);
+	                        break;
+
+	                    case 2:
+	                        // Display option 2
+	                        view.displayOp2Menu();
+
+	                        // get info from model
+	                        String info = model.getName()+"-"+model.getAge();
+
+	                        // display info in view
+	                        view.displayOp2Data(info);
+
+	                        break;
+
+	                    // Invalid option
+	                    default:
+	                        view.badOption();
+	                        end = true;
+	                        break;
+	                }
+	            }
+	        } 
+	        catch (InputMismatchException e)
+	        {
+	            run();
+	        }
+	    }
+
 }

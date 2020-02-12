@@ -189,15 +189,51 @@ public class Modelo {
 	} //llave metodo
 
 
-	public ArrayList<Multa> procesosarColarPorComparendo()
+	public ArrayList<Multa> procesosarColarPorComparendo() throws noExisteObjetoException
 	{
-		ArrayList<Multa> arreglo = new ArrayList<Multa>();
+		
+		
+		ArrayList<Multa> arregloFinal = new ArrayList<Multa>();
+		Nodo<Multa> nodoActual = datosQueue.darPrimero();
+		Multa multaActual = nodoActual.darGenerico();
+		
+		String tipoMultaActual = multaActual.getInfraccion();
+		
+		Multa siguienteMulta = nodoActual.darSiguiente().darGenerico();
+		ArrayList<Multa> arregloTemporal = new ArrayList<Multa>();
+		
+		
+		
+		
+		while(nodoActual.hasNext())
+		{
+			
+			if(tipoMultaActual == siguienteMulta.getInfraccion())
+			{
+				arregloTemporal.add(multaActual);
+				
+			}
+			
+			else
+			{
+				
+				arregloTemporal.add(multaActual);
+				if(arregloTemporal.size() >= arregloFinal.size())
+				{
+					arregloFinal = arregloTemporal;
+				}
+				arregloTemporal.clear();
+				
+				
+			}
+			nodoActual.next();
+		}
 		
 		
 		
 		
 		
-		return arreglo;
+		return arregloFinal;
 		
 	}
 

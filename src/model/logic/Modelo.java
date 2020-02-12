@@ -189,40 +189,41 @@ public class Modelo {
 	} //llave metodo
 
 
-	public ArrayList<Multa> procesosarColarPorComparendo() throws noExisteObjetoException
+	public LinkedQueue<Multa> procesosarColarPorComparendo() throws noExisteObjetoException
 	{
 		
 		
-		ArrayList<Multa> arregloFinal = new ArrayList<Multa>();
-		Nodo<Multa> nodoActual = datosQueue.darPrimero();
+		LinkedQueue<Multa> arregloFinal = new LinkedQueue<Multa>();
+		Nodo<Multa> nodoActual = datosQueue.dequeue();
 		Multa multaActual = nodoActual.darGenerico();
+		Multa siguienteMulta = nodoActual.darSiguiente().darGenerico();
 		
 		String tipoMultaActual = multaActual.getInfraccion();
 		
-		Multa siguienteMulta = nodoActual.darSiguiente().darGenerico();
-		ArrayList<Multa> arregloTemporal = new ArrayList<Multa>();
+		
+		LinkedQueue<Multa> arregloTemporal = new LinkedQueue<Multa>();
+		
+		Nodo<Multa> aEliminar = arregloTemporal.darPrimero();
 		
 		
 		
 		
 		while(nodoActual.hasNext())
 		{
+			arregloTemporal.enqueue(nodoActual);
 			
-			if(tipoMultaActual == siguienteMulta.getInfraccion())
-			{
-				arregloTemporal.add(multaActual);
-				
-			}
+			if(!(tipoMultaActual.equals(siguienteMulta.getInfraccion())))
 			
-			else
 			{
-				
-				arregloTemporal.add(multaActual);
 				if(arregloTemporal.size() >= arregloFinal.size())
 				{
 					arregloFinal = arregloTemporal;
 				}
-				arregloTemporal.clear();
+				
+				while(aEliminar.hasNext());
+				{
+					arregloTemporal.dequeue();
+				}
 				
 				
 			}
@@ -236,5 +237,28 @@ public class Modelo {
 		return arregloFinal;
 		
 	}
+	
+	public LinkedStack<Multa> reportarComparendos(int pCantidadComparendos, String tipoComparendo) throws noExisteObjetoException
+	{
+		Nodo<Multa> nodoActual = datosStack.pop();
+		Multa multaActual = nodoActual.darGenerico();
+		LinkedStack<Multa> pila = new LinkedStack<Multa>();
+		while(nodoActual.hasNext() && pCantidadComparendos <= pila.size())
+		{
+			if(multaActual.getInfraccion().equals(tipoComparendo) )
+			{
+				pila.push(nodoActual);
+			}
+			
+		}
+		
+		
+		
+		return pila;
+	}
+	
+	
+	
+	
 
 }//llave clase

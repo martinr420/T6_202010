@@ -1,7 +1,6 @@
 package model.logic;
 
-import model.data_structures.ArregloDinamico;
-import model.data_structures.IArregloDinamico;
+
 
 
 import java.io.FileReader;
@@ -15,12 +14,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import model.data_structures.ArregloDinamico;
-import model.data_structures.IArregloDinamico;
-import model.data_structures.ILinkedQueue;
-import model.data_structures.ILinkedStack;
-import model.data_structures.LinkedQueue;
-import model.data_structures.LinkedStack;
+
+
+import model.data_structures.IListaDoblementeEncadenada;
+
+import model.data_structures.ListaDoblementeEncadenada;
 import model.data_structures.Nodo;
 import model.data_structures.noExisteObjetoException;
 
@@ -32,10 +30,9 @@ public class Modelo {
 	/**
 	 * Atributos del modelo del mundo
 	 */
-	private ILinkedQueue<Multa> datosQueue;
-	private ILinkedStack<Multa> datosStack;
-	
-	
+	private IListaDoblementeEncadenada<Multa> datos;
+
+
 
 
 	/**
@@ -43,30 +40,24 @@ public class Modelo {
 	 */
 	public Modelo()
 	{
-		datosStack = new LinkedStack<Multa>();
-		datosQueue = new LinkedQueue<Multa>();
-		
-		
+		datos = new ListaDoblementeEncadenada<Multa>();
+
+
 	}
 
 	/**
 	 * Constructor del modelo del mundo con capacidad dada
 	 * @param tamano
 	 */
-//	public Modelo(int capacidad)
-//	{
-//		//datos = new ArregloDinamico(capacidad);
-//	}
-	
-	public LinkedQueue<Multa> darDatosQueue()
+	//	public Modelo(int capacidad)
+	//	{
+	//		//datos = new ArregloDinamico(capacidad);
+	//	}
+
+
+	public ListaDoblementeEncadenada<Multa> darDatos()
 	{
-		return  (LinkedQueue<Multa>) datosQueue;
-	}
-	
-	
-	public LinkedStack<Multa> darDatosStack()
-	{
-		return  (LinkedStack<Multa>) datosStack;
+		return  (ListaDoblementeEncadenada<Multa>) datos;
 	}
 
 	/**
@@ -75,7 +66,7 @@ public class Modelo {
 	 */
 	public int darTamano()
 	{
-		return datosQueue.size();
+		return datos.darTamano();
 	}
 
 	/**
@@ -84,8 +75,7 @@ public class Modelo {
 	 */
 	public void agregar(Nodo<Multa> dato)
 	{	
-		datosQueue.enqueue(dato);
-		datosStack.push(dato);
+		datos.agregarNodoAlFinal(dato.darGenerico());
 	}
 
 	/**
@@ -94,25 +84,7 @@ public class Modelo {
 	 * @return dato encontrado
 	 * @throws noExisteObjetoException 
 	 */
-	
-	
-	
 
-	/**
-	 * Requerimiento eliminar dato
-	 * @param dato Dato a eliminar
-	 * @return dato eliminado
-	 * @throws noExisteObjetoException 
-	 */
-	public Nodo<Multa> pop(Nodo<Multa> dato) throws noExisteObjetoException
-	{
-		return datosStack.pop();
-	}
-	
-	public Nodo<Multa> dequeue() throws noExisteObjetoException
-	{
-		return datosQueue.dequeue();
-	}
 
 	public void cargarDatos() throws noExisteObjetoException 
 	{
@@ -123,8 +95,8 @@ public class Modelo {
 		try {
 
 
-			LinkedStack<Multa> listaStack = new LinkedStack<Multa>();
-			LinkedQueue<Multa> listaQueue = new LinkedQueue<Multa>();
+			ListaDoblementeEncadenada<Multa> lista = new ListaDoblementeEncadenada<Multa>();
+
 
 
 			lector = new JsonReader(new FileReader(path));
@@ -174,8 +146,7 @@ public class Modelo {
 
 
 				Nodo<Multa> nMulta = new Nodo<Multa>(multa);
-				datosQueue.enqueue(nMulta);
-				datosStack.push(nMulta);
+				agregar(nMulta);
 
 			} //llave for grande
 
@@ -187,72 +158,180 @@ public class Modelo {
 
 
 	} //llave metodo
-	
+
 	public String retornarreq1() throws noExisteObjetoException
 	{
-		return datosQueue.size()+" " + datosQueue.darPrimero().darGenerico().toString() +" " + datosStack.darUltimo().darGenerico().toString();
+		return "El total de comparendos son: " + datos.darTamano()+". el primer comparendo de la lista es: "
+				+ datos.darPrimero().toString() +".";
+	}
+
+	public Comparable[] copiarComparendos() throws noExisteObjetoException
+	{
+		Comparable[] comparables = new Comparable[datos.darTamano()];
+
+		for(int i = 0; i < datos.darTamano(); i++)
+		{
+			comparables[i] = datos.darNodoEnPos(i);
+		}
+		if(comparables.length > 0)
+		{
+			System.out.println("El arreglo fue creado con exito");
+
+		}
+
+		else 
+		{
+			System.out.println("fail");
+		}
+
+
+		return comparables;
 	}
 
 
-	public LinkedQueue<Multa> procesosarColaPorComparendo() throws noExisteObjetoException
+	public void shellSort(Comparable[] datos)
 	{
-		
-		
-		LinkedQueue<Multa> arregloFinal = new LinkedQueue<Multa>();
-		Nodo<Multa> nodoActual = datosQueue.dequeue();
-		Multa multaActual = nodoActual.darGenerico();
-		Multa siguienteMulta = nodoActual.darSiguiente().darGenerico();
-		
-		String tipoMultaActual = multaActual.getInfraccion();
-		
-		
-		LinkedQueue<Multa> arregloTemporal = new LinkedQueue<Multa>();
-		
-		while(nodoActual != null)
+
+
+		long inicio = System.currentTimeMillis();
+		int salto = datos.length/2;
+
+		while( salto != 0 )
 		{
-			arregloTemporal.enqueue(nodoActual);
-			if(!(tipoMultaActual.equals(siguienteMulta.getInfraccion())))
-			{
-				if(arregloTemporal.size() >= arregloFinal.size())
+			boolean intercambio = true;
+
+			while(intercambio)
+			{ 
+				intercambio = false;
+				for(int i = salto; i < datos.length; i++)
 				{
-					arregloFinal = arregloTemporal;
+					if(datos[i-salto].compareTo(datos[i]) > 0)
+					{ 
+						Comparable temp = datos[i]; 
+						datos[i] = datos[i-salto];
+						datos[i-salto] = temp;
+						intercambio=true;
+					}
 				}
-				arregloTemporal = new  LinkedQueue<Multa>();
+
 			}
+			salto/=2;
 		}
-		
-	
-		
-		
-		
-		
-		
-		return arregloFinal;
-		
-		
-	}
-	
-	public LinkedStack<Multa> reportarComparendos(int pCantidadComparendos, String tipoComparendo) throws noExisteObjetoException
-	{
-		Nodo<Multa> nodoActual = datosStack.pop();
-		Multa multaActual = nodoActual.darGenerico();
-		LinkedStack<Multa> pila = new LinkedStack<Multa>();
-		while(nodoActual.hasNext() && pCantidadComparendos <= pila.size())
+
+		long fin = System.currentTimeMillis();
+
+		long tiempo = fin - inicio ;
+
+
+		System.out.println("el tiempo total es de: " + tiempo );
+		System.out.println("los primeros comparendos son: ");
+		for(int j = 1; j <= 10; j++ )
 		{
-			if(multaActual.getInfraccion().equals(tipoComparendo) )
-			{
-				pila.push(nodoActual);
-			}
-			
+			System.out.println(j + " " + datos[j-1].toString());
 		}
-		
-		
-		
-		return pila;
+		System.out.println("---------------------------------------------------------------------");
+		System.out.println("los ultimos comparendos son: ");
+		for(int k = datos.length - 11; k < datos.length; k++)
+		{
+			System.out.println(k+1 + " " + datos[k].toString());
+		}
+
+		System.out.println("----------------------------------------------------------");
 	}
-	
-	
-	
-	
+
+	public void mergeSort(Comparable datos[], int izq, int der)
+	{
+		long inicio = System.currentTimeMillis();
+		if(izq < der)
+		{
+			//Encuentra el punto medio del vector.
+			int mid = (izq + der) / 2;
+
+			//Divide la primera y segunda mitad (llamada recursiva).
+			mergeSort(datos, izq, mid);
+			mergeSort(datos, mid+1, der);
+
+			//Une las mitades.
+			merge(datos, izq, mid, der);
+		}
+
+	}
+	public void merge(Comparable datos[], int izq, int mid, int der)
+	{
+		//Encuentra el tamaño de los sub-vectores para unirlos.
+		int n1 = mid - izq + 1;
+		int n2 = der - mid;
+
+		//Vectores temporales.
+		Comparable izqArray[] = new Comparable [n1];
+		Comparable derArray[] = new Comparable[n2];
+
+		//Copia los datos a los arrays temporales.
+		for (int i=0; i < n1; i++) {
+			izqArray[i] = datos[izq+i];
+		}
+		for (int j=0; j < n2; j++) {
+			derArray[j] = datos[mid + j + 1];
+		}
+		/* Une los vectorestemporales. */
+
+		//Índices inicial del primer y segundo sub-vector.
+		int i = 0, j = 0;
+
+		//Índice inicial del sub-vector arr[].
+		int k = izq;
+
+		//Ordenamiento.
+		while (i < n1 && j < n2) {
+			if (izqArray[i].compareTo(derArray[j]) < 0) {
+				datos[k] = izqArray[i];
+				i++;
+			} else {
+				datos[k] = derArray[j];
+				j++;
+			}
+			k++;
+		}//Fin del while.
+
+		/* Si quedan elementos por ordenar */
+		//Copiar los elementos restantes de leftArray[].
+		while (i < n1) {
+			datos[k] = izqArray[i];
+			i++;
+			k++;
+		}
+		//Copiar los elementos restantes de rightArray[].
+		while (j < n2) {
+			datos[k] = derArray[j];
+			j++;
+			k++;
+		}
+	}
+
+
+	public void darInfoMergeSort(Comparable[] datos, int izq, int der)
+	{
+		long inicio = System.currentTimeMillis();
+		
+		mergeSort(datos, izq, der);
+				
+		long fin = System.currentTimeMillis();
+
+		long time = fin - inicio;
+
+		System.out.println("el tiempo total de ejecucion es de " + time);
+
+		System.out.println("Los primeros 10 objetos del arreeglo son");
+		for(int i = 0; i < 10; i++)
+		{
+			System.out.println(datos[i].toString());
+		}
+		System.out.println("--------------------------------------------------");
+		System.out.println("Los ultimos datos son: ");
+		for(int j = datos.length-11; j < datos.length; j++)
+		{
+			System.out.println(datos[j].toString());
+		}
+	}
 
 }//llave clase

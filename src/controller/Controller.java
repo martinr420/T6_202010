@@ -61,55 +61,35 @@ public class Controller {
 				switch (option) {
 
 				case 0:
-					// Display option 0
-
-
-					// read name from input
+					
 					modelo.cargarDatos();
 
-
-
 					view.displayOp0Menu(modelo.retornarreq1());
+					
+					
 					break;
 
 				case 1:
 					// Display option 1
 					view.displayOp1Menu();
-					view.displayOp1Data();
-					
-					
-
-					// read age from input
-					modelo.cargarDatos();
-					
-
-			
-					LinkedQueue<Multa> lista = modelo.procesosarColaPorComparendo();
-					
-					
-					Nodo<Multa> nodo = lista.dequeue();
-					
-					
-					
-					while(nodo!=null)
-					{
-						System.out.println(nodo.darGenerico().toString());
-						nodo = lista.dequeue();
-					}
+					modelo.copiarComparendos();
 					
 					
 					break;
 
 				case 2:
-					// Display option 2
 					view.displayOp2Menu();
+					
+					
+					modelo.shellSort(modelo.copiarComparendos());
 
-					// get info from model
-					//String info = model.getName()+"-"+model.getAge();
-
-					// display info in view
-					// view.displayOp2Data(info);
-
+					break;
+					
+				case 3:
+					view.displayOp3Menu();
+					modelo.darInfoMergeSort(modelo.copiarComparendos(), 0, modelo.copiarComparendos().length-1);
+					view.displayOp3Menu();
+					
 					break;
 
 					// Invalid option

@@ -58,8 +58,8 @@ public class TestLinkedQueue <K> extends TestCase
 	public void testSize ()
 	{
 		SetUp();
-		int tama√±o = linkedQueue.size();
-		assertEquals(7, tama√±o);
+		int tama√ = linkedQueue.size();
+		assertEquals(7, tama√);
 	}
 	
 	@Test

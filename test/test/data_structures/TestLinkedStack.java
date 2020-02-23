@@ -61,8 +61,8 @@ public class TestLinkedStack<K> extends TestCase
 	private void testSize()
 	{
 		SetUp();
-		int tama√±o = linkedStack.size();
-		assertEquals(6, tama√±o);
+		int tama√ = linkedStack.size();
+		assertEquals(6, tama√);
 	}
 	
 	@Test 

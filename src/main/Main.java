@@ -3,6 +3,7 @@ import java.util.InputMismatchException;
 
 import controller.Controller;
 import model.data_structures.noExisteObjetoException;
+import model.logic.Modelo;
 
 public class Main {
 	

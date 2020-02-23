@@ -22,9 +22,9 @@ public class View
         System.out.println(  " **==========================**");
         System.out.println(" ||      ==== MENU ====      ||");
 
-        System.out.println( " ||" +  " 0. cargar datos  "  + "            ||");
-        System.out.println( " ||" +  " 1. Procesar cola "  + "              ||");
-        System.out.println( " ||" + " 2. Procesar pila  "  + "            ||");
+        System.out.println( " ||" +  " 0. Cargar datos   "  + "            ||");
+        System.out.println( " ||" +  " 1. Crear arreglo "  + "              ||");
+        System.out.println( " ||" + " 2. Ordenar Arreglo ShellSort  "  + "            ||");
         System.out.println( " **==========================**\n");
 
         // display hint
@@ -59,6 +59,7 @@ public class View
     public void displayOp0Menu(String mensaje) {
         System.out.println( "====== Cargar datos ======");
         System.out.println(mensaje);
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         
 
     }
@@ -80,7 +81,7 @@ public class View
      * Print option 1 menu.
      */
     public void displayOp1Menu() {
-        System.out.println( "====== Procesar cola ======");
+        System.out.println( "====== Ordenar arreglo shell sort ======");
         
 
     }
@@ -102,7 +103,7 @@ public class View
      * Print option 2 menu.
      */
     public void displayOp2Menu() {
-        System.out.println( "====== Get Info ======");
+        System.out.println( "====== Arreglo Ordenado Shell Sort ======");
     }
 
     /**
@@ -114,5 +115,10 @@ public class View
         System.out.println( "Age: " + pInfo.split("-")[1]);
         System.out.println("======================\n");
 
+    }
+    
+    public void displayOp3Menu()
+    {
+    	System.out.println("===== Arreglo ordenado por Merge Sort =====");
     }
 }

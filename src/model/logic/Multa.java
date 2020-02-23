@@ -2,7 +2,7 @@ package model.logic;
 
 
 
-public class Multa
+public class Multa implements Comparable<Multa>
 {
 
 	public long id;
@@ -123,6 +123,27 @@ public class Multa
 
 	public void setGeo(Geo geo) {
 		this.geo = geo;
+	}
+
+	@Override
+	public int compareTo(Multa pMulta) {
+		
+		int num;
+		
+		if(fecha.compareTo(pMulta.getFecha()) > 0)
+		{
+			num = 1;
+		}
+		else if(fecha.compareTo(pMulta.fecha) < 0)
+		{
+			num = -1;
+		}
+		else
+		{
+			num = (int) (id - pMulta.getId());
+		}
+		// TODO Auto-generated method stub
+		return num;
 	}
 
 

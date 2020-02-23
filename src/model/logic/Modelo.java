@@ -116,7 +116,7 @@ public class Modelo {
 
 	public void cargarDatos() throws noExisteObjetoException 
 	{
-		String path = "./data/Gson";
+		String path = "./data/Json.Json";
 		JsonReader lector;
 
 
@@ -187,9 +187,14 @@ public class Modelo {
 
 
 	} //llave metodo
+	
+	public String retornarreq1() throws noExisteObjetoException
+	{
+		return datosQueue.size()+" " + datosQueue.darPrimero().darGenerico().toString() +" " + datosStack.darUltimo().darGenerico().toString();
+	}
 
 
-	public LinkedQueue<Multa> procesosarColarPorComparendo() throws noExisteObjetoException
+	public LinkedQueue<Multa> procesosarColaPorComparendo() throws noExisteObjetoException
 	{
 		
 		
@@ -203,38 +208,27 @@ public class Modelo {
 		
 		LinkedQueue<Multa> arregloTemporal = new LinkedQueue<Multa>();
 		
-		Nodo<Multa> aEliminar = arregloTemporal.darPrimero();
-		
-		
-		
-		
-		while(nodoActual.hasNext())
+		while(nodoActual != null)
 		{
 			arregloTemporal.enqueue(nodoActual);
-			
 			if(!(tipoMultaActual.equals(siguienteMulta.getInfraccion())))
-			
 			{
 				if(arregloTemporal.size() >= arregloFinal.size())
 				{
 					arregloFinal = arregloTemporal;
 				}
-				
-				while(aEliminar.hasNext());
-				{
-					arregloTemporal.dequeue();
-				}
-				
-				
+				arregloTemporal = new  LinkedQueue<Multa>();
 			}
-			nodoActual.next();
 		}
+		
+	
 		
 		
 		
 		
 		
 		return arregloFinal;
+		
 		
 	}
 	

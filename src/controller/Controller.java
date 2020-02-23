@@ -1,111 +1,129 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import model.data_structures.LinkedQueue;
+import model.data_structures.Nodo;
+import model.data_structures.noExisteObjetoException;
 import model.logic.Modelo;
+import model.logic.Multa;
 import view.View;
 
 public class Controller {
 
-	
-	    // -------------------------------------------------------------
-	    // Attributes
-	    // -------------------------------------------------------------
 
-	    /**
-	     * A model.
-	     */
-	    private Modelo modelo;
+	// -------------------------------------------------------------
+	// Attributes
+	// -------------------------------------------------------------
 
-	    /**
-	     * A view.
-	     */
-	    private View view;
+	/**
+	 * A model.
+	 */
+	private Modelo modelo;
 
-	    // -------------------------------------------------------------
-	    // Constructor
-	    // -------------------------------------------------------------
+	/**
+	 * A view.
+	 */
+	private View view;
 
-	    /**
-	     * Creates the project view and the project model
-	     */
-	    public Controller() {
-	        modelo = new Modelo();
-	        view = new View();
-	    }
+	// -------------------------------------------------------------
+	// Constructor
+	// -------------------------------------------------------------
 
-	    // -------------------------------------------------------------
-	    // Methods
-	    // -------------------------------------------------------------
+	/**
+	 * Creates the project view and the project model
+	 */
+	public Controller() {
+		modelo = new Modelo();
+		view = new View();
+	}
 
-	    /**
-	     * Prints the user options and updates the view using the model.
-	     *
-	     * @throws InputMismatchException If the user inputs an incorrect number sequence.
-	     */
-	    public void run() throws InputMismatchException {
-	        try {
-	            Scanner reader = new Scanner(System.in);
-	            boolean end = false;
+	// -------------------------------------------------------------
+	// Methods
+	// -------------------------------------------------------------
 
-	            while (!end) {
-	                view.displayMenu();
-	                int option = reader.nextInt();
-	                switch (option) {
+	/**
+	 * Prints the user options and updates the view using the model.
+	 *
+	 * @throws InputMismatchException If the user inputs an incorrect number sequence.
+	 * @throws noExisteObjetoException 
+	 */
+	public void run() throws InputMismatchException, noExisteObjetoException {
+		try {
+			Scanner reader = new Scanner(System.in);
+			boolean end = false;
 
-	                    case 0:
-	                        // Display option 0
-	                        view.displayOp0Menu();
+			while (!end) {
+				view.displayMenu();
+				int option = reader.nextInt();
+				switch (option) {
 
-	                        // read name from input
-	                        String name = reader.next();
+				case 0:
+					// Display option 0
 
-	                        // set name in model
-	                        modelo.setName(name);
 
-	                        // display name in view
-	                        view.displayOp0Data(name);
-	                        break;
+					// read name from input
+					modelo.cargarDatos();
 
-	                    case 1:
-	                        // Display option 1
-	                        view.displayOp1Menu();
 
-	                        // read age from input
-	                        int age = reader.nextInt();
 
-	                        // set age in model
-	                        model.setAge(age);
+					view.displayOp0Menu(modelo.retornarreq1());
+					break;
 
-	                        // display age in view
-	                        view.displayOp1Data(age);
-	                        break;
+				case 1:
+					// Display option 1
+					view.displayOp1Menu();
+					view.displayOp1Data();
+					
+					
 
-	                    case 2:
-	                        // Display option 2
-	                        view.displayOp2Menu();
+					// read age from input
+					modelo.cargarDatos();
+					
 
-	                        // get info from model
-	                        String info = model.getName()+"-"+model.getAge();
+			
+					LinkedQueue<Multa> lista = modelo.procesosarColaPorComparendo();
+					
+					
+					Nodo<Multa> nodo = lista.dequeue();
+					
+					
+					
+					while(nodo!=null)
+					{
+						System.out.println(nodo.darGenerico().toString());
+						nodo = lista.dequeue();
+					}
+					
+					
+					break;
 
-	                        // display info in view
-	                        view.displayOp2Data(info);
+				case 2:
+					// Display option 2
+					view.displayOp2Menu();
 
-	                        break;
+					// get info from model
+					//String info = model.getName()+"-"+model.getAge();
 
-	                    // Invalid option
-	                    default:
-	                        view.badOption();
-	                        end = true;
-	                        break;
-	                }
-	            }
-	        } 
-	        catch (InputMismatchException e)
-	        {
-	            run();
-	        }
-	    }
+					// display info in view
+					// view.displayOp2Data(info);
+
+					break;
+
+					// Invalid option
+				default:
+					view.badOption();
+					end = true;
+					break;
+				}
+			}
+		} 
+		catch (InputMismatchException e)
+		{
+			run();
+		}
+	}
 
 }

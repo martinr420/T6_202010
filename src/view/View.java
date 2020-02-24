@@ -22,9 +22,11 @@ public class View
         System.out.println(  " **==========================**");
         System.out.println(" ||      ==== MENU ====      ||");
 
-        System.out.println( " ||" +  " 0. Cargar datos   "  + "            ||");
-        System.out.println( " ||" +  " 1. Crear arreglo "  + "              ||");
-        System.out.println( " ||" + " 2. Ordenar Arreglo ShellSort  "  + "            ||");
+        System.out.println( " ||" +  " 0. Cargar datos   "  + "       ||");
+        System.out.println( " ||" +  " 1. Crear arreglo "  + "        ||");
+        System.out.println( " ||" + " 2. Ordenar Arreglo ShellSort " + " ||");
+        System.out.println("||" + "3. Ordenar Arreglo por MergeSort");
+        System.out.println("||" + "4. Ordenar Arreglo por QuickSort");
         System.out.println( " **==========================**\n");
 
         // display hint
@@ -120,5 +122,10 @@ public class View
     public void displayOp3Menu()
     {
     	System.out.println("===== Arreglo ordenado por Merge Sort =====");
+    }
+    
+    public void displayOp4Menu()
+    {
+    	System.out.println("======= Arreglo ordenado por el metodo Quick Sort");
     }
 }

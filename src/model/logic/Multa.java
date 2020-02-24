@@ -42,7 +42,7 @@ public class Multa implements Comparable<Multa>
 	public String toString()
 	{
 
-		String msj = "La id es "+ id +" la fecha del comparendo "+ fecha 
+		String msj = "El id es "+ id +" la fecha del comparendo "+ fecha 
 				+" el medio de detencion es "+ medioDete +
 				" el vehiculo es "+ vehiculo +" el tipo de servicio es " + servicio + 
 				" la infraccion es " + infraccion + 
@@ -140,7 +140,14 @@ public class Multa implements Comparable<Multa>
 		}
 		else
 		{
-			num = (int) (id - pMulta.getId());
+			if (id - pMulta.id < 0)
+				{
+				num = -1;
+				}
+			else 
+			{
+				num = 1;
+			}
 		}
 		// TODO Auto-generated method stub
 		return num;

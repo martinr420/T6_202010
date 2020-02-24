@@ -312,9 +312,9 @@ public class Modelo {
 	public void darInfoMergeSort(Comparable[] datos, int izq, int der)
 	{
 		long inicio = System.currentTimeMillis();
-		
+
 		mergeSort(datos, izq, der);
-				
+
 		long fin = System.currentTimeMillis();
 
 		long time = fin - inicio;
@@ -334,4 +334,62 @@ public class Modelo {
 		}
 	}
 
+	public void quickSort(Comparable[] datos, int izq, int der)
+	{
+
+
+		if (izq < der) 
+		{
+			int index = particion(datos, izq, der);
+
+			quickSort(datos, izq, index-1);
+			quickSort(datos, index+1, der);
+		}
+
+
+
+	}
+	private int particion(Comparable datos[], int izq, int der) {
+	    Comparable pivote = datos[der];
+	    int i = (izq-1);
+	 
+	    for (int j = izq; j < der; j++) {
+	        if (datos[j].compareTo(pivote) <= 0) {
+	            i++;
+	 
+	            Comparable temp = datos[i];
+	            datos[i] = datos[j];
+	            datos[j] = temp;
+	        }
+	    }
+	 
+	    Comparable temp = datos[i+1];
+	    datos[i+1] = datos[der];
+	    datos[der] = temp;
+	 
+	    return i+1;
+	}
+
+	public void darDatosQuickSort(Comparable[] datos, int izq, int der)
+	{
+		long inicio = System.currentTimeMillis();
+		quickSort(datos, izq, der);
+		long fin = System.currentTimeMillis();
+		long time = fin - inicio;
+
+		System.out.println("el tiempo total de ejecucion es de " + time);
+
+		System.out.println("Los primeros 10 objetos del arreeglo son");
+		for(int i = 0; i < 10; i++)
+		{
+			System.out.println(datos[i].toString());
+		}
+		System.out.println("--------------------------------------------------");
+		System.out.println("Los ultimos datos son: ");
+		for(int j = datos.length-11; j < datos.length; j++)
+		{
+			System.out.println(datos[j].toString());
+		}
+
+	}
 }//llave clase

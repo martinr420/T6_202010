@@ -3,8 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-import model.data_structures.LinkedQueue;
 import model.data_structures.Nodo;
 import model.data_structures.noExisteObjetoException;
 import model.logic.Modelo;
@@ -52,6 +50,8 @@ public class Controller {
 	 */
 	public void run() throws InputMismatchException, noExisteObjetoException {
 		try {
+			modelo.cargarDatos();
+			Comparable[] lista = modelo.copiarComparendos();
 			Scanner reader = new Scanner(System.in);
 			boolean end = false;
 
@@ -87,9 +87,16 @@ public class Controller {
 					
 				case 3:
 					view.displayOp3Menu();
-					modelo.darInfoMergeSort(modelo.copiarComparendos(), 0, modelo.copiarComparendos().length-1);
+					modelo.darInfoMergeSort(lista, 0, lista.length-1);
 					view.displayOp3Menu();
 					
+					break;
+					
+					
+				case 4:
+					view.displayOp4Menu();
+					modelo.darDatosQuickSort(lista, 0, lista.length-1);
+					view.displayOp4Menu();
 					break;
 
 					// Invalid option

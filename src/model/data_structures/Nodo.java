@@ -1,61 +1,75 @@
 package model.data_structures;
 
+import java.util.Iterator;
 
-public class Nodo<K> 
+public class Nodo<K> implements Iterator
 {
 
 	private K generic;
 	
-	private Nodo<K> izq;
+	private Nodo<K> anterior;
 	
-	private Nodo<K> der;
+	private Nodo<K> siguiente;
 	
 	public Nodo(K pGeneric)
 	
 	{
-		izq = null;
+		anterior = null;
 		
-		der = null;
+		siguiente = null;
 		
 		generic = pGeneric;
 				
 	}
 	
 	
-	public Nodo<K> darIzq()
+	public Nodo<K> darSiguiente()
 	{
-		return  izq;
+		return  siguiente;
 	}
 	
 	
-	public Nodo<K> darDer()
+	public Nodo<K> darAnterior()
 	{
-		return  der;
+		return  anterior;
 	}
 	
-	public void cambiarIzq(Nodo<K> pIzq)
+	public void cambiarSiguiente(Nodo<K> pSig)
 	{
-		izq = pIzq;
+		siguiente = pSig;
 	}
 	
-	public void cambiarDer(Nodo<K> pDer )
+	public void cambiarAnterior(Nodo<K> pAnterior )
 	{
-		der = pDer;
+		anterior = pAnterior;
 	}
 	
-	public void desconectarIzq()
+	public void desconectarSiguiente()
 	{
-		izq = null;
+		siguiente = null;
 	}
 	
-	public void desconectarDer()
+	public void desconectarAnterior()
 	{
-		der = null;
+		anterior = null;
 	}
 	
 	public K generic()
 	{
 		return generic;
+	}
+
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return this.darSiguiente() != null;
+	}
+
+
+	@Override
+	public Object next() {
+		// TODO Auto-generated method stub
+		return siguiente;
 	}
 
 

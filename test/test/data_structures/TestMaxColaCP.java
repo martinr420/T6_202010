@@ -1,7 +1,5 @@
 package test.data_structures;
 
-import javax.sql.rowset.serial.SerialException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +18,7 @@ public class TestMaxColaCP extends TestCase
 	{
 		maxCola = new MaxColaCP<Integer>();
 
-		for(int i = 1; i <= 100; i++)
+		for(int i = 1; i <= 5; i++)
 		{
 			maxCola.insert(i);
 		}
@@ -29,21 +27,21 @@ public class TestMaxColaCP extends TestCase
 	public void testSize()
 	{
 		setUp1();
-		assertEquals(100, maxCola.size());
+		assertEquals(5, maxCola.size());
 
 	}
 	@Test
 	public void testInsert()
 	{
 		setUp1();
-		maxCola.insert(101);
-		assertEquals(maxCola.size(), 101);
-		assertTrue(maxCola.size() == 101);
+		maxCola.insert(6);
+		assertEquals(maxCola.size(), 6);
+		assertTrue(maxCola.size() == 6);
 		assertTrue(!maxCola.isEmpty());
 		assertFalse(maxCola.isEmpty());
 		try
 		{
-			assertTrue(maxCola.max() == 101);
+			assertTrue(maxCola.max() == 6);
 		} catch (noExisteObjetoException e) 
 		{
 			e.printStackTrace();
@@ -55,29 +53,29 @@ public class TestMaxColaCP extends TestCase
 	{
 		setUp1();
 		try {
-			assertTrue(maxCola.max() == 100);
+			assertTrue(maxCola.max() == 5);
 			assertTrue(maxCola.max() != 101);
 			assertFalse(maxCola.max() == 101);
-			assertFalse(maxCola.max() != 100);
+			assertFalse(maxCola.max() != 5);
 		} catch (noExisteObjetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	@Test
-	public void testDelMax() throws noExisteObjetoException
+	public void testDelMax() 
 	{
 		setUp1();
-		assertTrue(maxCola.deleteMax() == 100);
-//		try
-//		{
-//			System.out.println("Esta eliminando : "+maxCola.deleteMax());
-//			assertTrue(maxCola.deleteMax() == 100);
-//		}
-//		catch(noExisteObjetoException e)
-//		{
-//			e.printStackTrace();
-//		}
+		try {
+			assertTrue(maxCola.deleteMax() == 5);
+			assertTrue(maxCola.deleteMax() == 4);
+	
+		} catch (noExisteObjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	
 	}
 	@Test
 	public void testIsEmpty()

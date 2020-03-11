@@ -6,22 +6,22 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 {
 	private int tamano;
 	private K[] arreglo;
-	
+
 	public MaxHeapCP(int capacidad)
 	{
 		tamano = 0;
-		arreglo = (K[]) new Object[capacidad + 1];
+		arreglo = (K[]) new Comparable[capacidad + 1];
 	}
 
 	public MaxHeapCP()
 	{
 		this(1);
 	}
-	
+
 	public MaxHeapCP(K[] keys)
 	{
 		tamano = keys.length;
-		arreglo = (K[]) new Object[keys.length + 1];
+		arreglo = (K[]) new Comparable[keys.length + 1];
 		for (int i = 0; i < tamano; i++)
 		{
 			arreglo[i+1] = keys[i];
@@ -45,9 +45,16 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		{
 			cambiarTamano(arreglo.length*2);
 		}
-		++tamano;
-		arreglo[tamano] = key;
-		swim(tamano);
+		else if(tamano == 0)
+		{
+			arreglo[++tamano] = key;
+		}
+		else
+		{
+			arreglo[++tamano] = key;
+			swim(tamano);	
+		}
+
 	}
 
 
@@ -58,7 +65,7 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		{
 			throw new noExisteObjetoException();
 		}
-		
+
 		return arreglo[1];
 	}
 
@@ -70,11 +77,16 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		{
 			throw new noExisteObjetoException();
 		}
+		if(tamano == 1)
+		{
+			K max = arreglo[tamano--];
+			arreglo[1] = null;
+		}
 		K max = arreglo[1];
 		intercambiar(1, tamano--);
 		sink(1);
 		arreglo[tamano+1] = null;
-	
+
 		return max;
 	}
 
@@ -92,7 +104,7 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 			k = k/2;
 		}
 	}
-	
+
 	private void sink(int k)
 	{
 		while (2*k <= tamano) 
@@ -113,7 +125,7 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 
 	private boolean esMenor(int i, int j) 
 	{
-			return ((Comparable<K>) arreglo[i]).compareTo(arreglo[j]) < 0;
+		return (arreglo[i]).compareTo(arreglo[j]) < 0;
 	}
 
 	private void intercambiar(int i, int j)
@@ -125,11 +137,36 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 
 	private void cambiarTamano(int capacidad) 
 	{
-		K[] temp = (K[]) new Object[capacidad];
+		K[] temp = (K[]) new Comparable[capacidad];
 		for (int i = 1; i <= tamano; i++)
 		{
 			temp[i] = arreglo[i];
 		}
 		arreglo = temp;
 	}
+	private void desconectarNodo(Nodo<K> pNodo) throws noExisteObjetoException
+	{
+		if(tamano == 0 || pNodo == null)
+		{
+			throw new noExisteObjetoException();
+		}
+		if(pNodo.darAnterior() != null && pNodo.darSiguiente() != null)
+		{
+			pNodo.darAnterior().cambiarSiguiente(pNodo.darSiguiente());
+			pNodo.darSiguiente().cambiarAnterior(pNodo.darAnterior());
+			pNodo.desconectarAnterior();
+			pNodo.desconectarSiguiente();
+		}
+		else if(pNodo.darSiguiente() != null)
+		{
+			pNodo.darSiguiente().desconectarAnterior();
+			pNodo.desconectarSiguiente();
+		}
+		else
+		{
+			pNodo.darAnterior().desconectarSiguiente();
+			pNodo.desconectarAnterior();
+		}
+	}
+
 }

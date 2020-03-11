@@ -15,7 +15,7 @@ public class TestMaxHeapCP extends TestCase
 	private void setUp1()
 	{
 		mh = new MaxHeapCP<Integer>(100);
-		for(int i = 1; i <= 100; i++ )
+		for(int i = 1; i <= 5; i++ )
 		{
 			mh.insert(i);
 		}
@@ -25,21 +25,19 @@ public class TestMaxHeapCP extends TestCase
 	public void testSize()
 	{
 		setUp1();
-		assertEquals(100, mh.size());
+		assertEquals(5, mh.size());
 
 	}
 	@Test
 	public void testInsert()
 	{
 		setUp1();
-		mh.insert(101);
-		assertEquals(mh.size(), 101);
-		assertTrue(mh.size() == 101);
-		assertTrue(!mh.isEmpty());
+		mh.insert(6);
+		assertTrue(mh.size() == 6);
 		assertFalse(mh.isEmpty());
 		try
 		{
-			assertTrue(mh.max() == 101);
+			assertTrue(mh.max() == 6);
 		} catch (noExisteObjetoException e) 
 		{
 			e.printStackTrace();
@@ -51,10 +49,10 @@ public class TestMaxHeapCP extends TestCase
 	{
 		setUp1();
 		try {
-			assertTrue(mh.max() == 100);
+			assertTrue(mh.max() == 5);
 			assertTrue(mh.max() != 101);
 			assertFalse(mh.max() == 101);
-			assertFalse(mh.max() != 100);
+			assertFalse(mh.max() != 5);
 		} catch (noExisteObjetoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +64,7 @@ public class TestMaxHeapCP extends TestCase
 		setUp1();
 		try
 		{
-			assertTrue(mh.deleteMax() == 100);
+			assertTrue(mh.deleteMax() == 5);
 		}
 		catch(noExisteObjetoException e)
 		{

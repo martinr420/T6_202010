@@ -50,8 +50,6 @@ public class Controller {
 	 */
 	public void run() throws InputMismatchException, noExisteObjetoException {
 		try {
-			modelo.cargarDatos();
-			Comparable[] lista = modelo.copiarComparendos();
 			Scanner reader = new Scanner(System.in);
 			boolean end = false;
 
@@ -61,18 +59,15 @@ public class Controller {
 				switch (option) {
 
 				case 0:
-					
-					modelo.cargarDatos();
-
-					view.displayOp0Menu(modelo.retornarreq1());
-					
-					
+					System.out.println("digite el tamano");
+					int tamanoMuestra = reader.nextInt();
+					view.displayOp0Menu(modelo.retornarreq1(tamanoMuestra));
 					break;
 
 				case 1:
 					// Display option 1
 					view.displayOp1Menu();
-					modelo.copiarComparendos();
+					
 					
 					
 					break;
@@ -81,24 +76,10 @@ public class Controller {
 					view.displayOp2Menu();
 					
 					
-					modelo.shellSort(modelo.copiarComparendos());
+					
 
 					break;
-					
-				case 3:
-					view.displayOp3Menu();
-					modelo.darInfoMergeSort(lista, 0, lista.length-1);
-					view.displayOp3Menu();
-					
-					break;
-					
-					
-				case 4:
-					view.displayOp4Menu();
-					modelo.darDatosQuickSort(lista, 0, lista.length-1);
-					view.displayOp4Menu();
-					break;
-
+			
 					// Invalid option
 				default:
 					view.badOption();

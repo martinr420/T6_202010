@@ -126,30 +126,20 @@ public class Multa implements Comparable<Multa>
 	}
 
 	@Override
-	public int compareTo(Multa pMulta) {
+	public int compareTo(Multa pMulta)
+	{
 		
-		int num;
+		int num = 0 ;
 		
-		if(fecha.compareTo(pMulta.getFecha()) > 0)
+		if(this.geo.darCoordenadas()[0] > pMulta.getGeo().darCoordenadas()[0])
 		{
 			num = 1;
 		}
-		else if(fecha.compareTo(pMulta.fecha) < 0)
+		else if(this.geo.darCoordenadas()[0] < pMulta.geo.darCoordenadas()[0])
 		{
 			num = -1;
 		}
-		else
-		{
-			if (id - pMulta.id < 0)
-				{
-				num = -1;
-				}
-			else 
-			{
-				num = 1;
-			}
-		}
-		// TODO Auto-generated method stub
+		
 		return num;
 	}
 

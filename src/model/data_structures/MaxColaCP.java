@@ -83,13 +83,7 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 			}
 			actual = actual.darSiguiente();
 		}
-		primero = mayor.darSiguiente();
-		mayor.darSiguiente().desconectarAnterior();
-		mayor.desconectarSiguiente();
-				
-		
-
-		// TODO Auto-generated method stub
+		desconectarNodo(mayor);
 		return mayor.generic();
 	}
 
@@ -98,6 +92,32 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		// TODO Auto-generated method stub
 		return tamano == 0;
 	}
+	
+	private void desconectarNodo(Nodo<K> pNodo) throws noExisteObjetoException
+	{
+		if(tamano == 0 || pNodo == null)
+		{
+			throw new noExisteObjetoException();
+		}
+		if(pNodo.darAnterior() != null && pNodo.darSiguiente() != null)
+		{
+			pNodo.darAnterior().cambiarSiguiente(pNodo.darSiguiente());
+			pNodo.darSiguiente().cambiarAnterior(pNodo.darAnterior());
+			pNodo.desconectarAnterior();
+			pNodo.desconectarSiguiente();
+		}
+		else if(pNodo.darSiguiente() != null)
+		{
+			pNodo.darSiguiente().desconectarAnterior();
+			pNodo.desconectarSiguiente();
+		}
+		else
+		{
+			pNodo.darAnterior().desconectarSiguiente();
+			pNodo.desconectarAnterior();
+		}
+	}
+
 	
 	
 

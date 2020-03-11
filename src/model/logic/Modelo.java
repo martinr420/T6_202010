@@ -6,7 +6,10 @@ package model.logic;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,11 +17,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-
-
-import model.data_structures.IListaDoblementeEncadenada;
-
-import model.data_structures.ListaDoblementeEncadenada;
+import model.data_structures.MaxColaCP;
+import model.data_structures.MaxHeapCP;
 import model.data_structures.Nodo;
 import model.data_structures.noExisteObjetoException;
 
@@ -30,52 +30,55 @@ public class Modelo {
 	/**
 	 * Atributos del modelo del mundo
 	 */
-	private IListaDoblementeEncadenada<Multa> datos;
-
-
-
-
+	private MaxHeapCP<Multa> datosHeap;
+	private MaxColaCP<Multa> datosCola;
 	/**
 	 * Constructor del modelo del mundo con capacidad predefinida
 	 */
 	public Modelo()
 	{
-		datos = new ListaDoblementeEncadenada<Multa>();
-
-
+		datosCola = new MaxColaCP<Multa>();
+		datosHeap = new MaxHeapCP<Multa>();
 	}
 
-	/**
-	 * Constructor del modelo del mundo con capacidad dada
-	 * @param tamano
-	 */
-	//	public Modelo(int capacidad)
-	//	{
-	//		//datos = new ArregloDinamico(capacidad);
-	//	}
 
 
-	public ListaDoblementeEncadenada<Multa> darDatos()
+	public MaxHeapCP<Multa> darDatosHeap()
 	{
-		return  (ListaDoblementeEncadenada<Multa>) datos;
+		return datosHeap;
+	}
+
+	public MaxColaCP<Multa> darDatosCola()
+	{
+		return datosCola;
 	}
 
 	/**
 	 * Servicio de consulta de numero de elementos presentes en el modelo 
 	 * @return numero de elementos presentes en el modelo
 	 */
-	public int darTamano()
+	public int sizeHeap()
 	{
-		return datos.darTamano();
+		return datosHeap.size();
+	}
+
+	public int sizeCola()
+	{
+		return datosCola.size();
 	}
 
 	/**
 	 * Requerimiento de agregar dato
 	 * @param dato
 	 */
-	public void agregar(Nodo<Multa> dato)
+	public void agregarAHeap(Nodo<Multa> dato)
 	{	
-		datos.agregarNodoAlFinal(dato.darGenerico());
+		datosHeap.insert(dato.generic());
+	}
+
+	public void agregarACola(Nodo<Multa> dato)
+	{
+		datosCola.insert(dato.generic());
 	}
 
 	/**
@@ -84,20 +87,15 @@ public class Modelo {
 	 * @return dato encontrado
 	 * @throws noExisteObjetoException 
 	 */
-
-
-	public void cargarDatos() throws noExisteObjetoException 
+	public List<Multa> cargarDatos() throws noExisteObjetoException 
 	{
-		String path = "./data/Json.Json";
+		List<Multa> muestra = new ArrayList<Multa>();
+
+		String path = "./data/comparendos_dei_2018_small.txt";
 		JsonReader lector;
 
 
 		try {
-
-
-			ListaDoblementeEncadenada<Multa> lista = new ListaDoblementeEncadenada<Multa>();
-
-
 
 			lector = new JsonReader(new FileReader(path));
 			JsonElement elem = JsonParser.parseReader(lector);
@@ -107,11 +105,9 @@ public class Modelo {
 
 
 			for(JsonElement e : features)
-			{
-
-
-
+			{			
 				JsonObject propiedades = (JsonObject) e.getAsJsonObject().get("properties");
+
 				long id = propiedades.get("OBJECTID").getAsLong();
 				String fecha = propiedades.get("FECHA_HORA").getAsString();
 				String medioDete = propiedades.getAsJsonObject().get("MEDIO_DETE").getAsString();
@@ -127,27 +123,18 @@ public class Modelo {
 				String tipo = geometry.get("type").getAsString();
 
 				double[] listaCoords = new double[3];
-
 				JsonArray coordsJson = geometry.getAsJsonArray("coordinates");
-
-
-
-
 				for(int i = 0; i < coordsJson.size(); i ++)
 				{
 					listaCoords[i] = coordsJson.get(i).getAsDouble();
-
-
 				}
 
 				Geo geometria = new Geo(tipo, listaCoords);
 
 				Multa multa = new Multa(id, fecha, medioDete, claseVehiculo, tipoServicio, infraccion, descripcion, localidad, geometria);
 
-
-				Nodo<Multa> nMulta = new Nodo<Multa>(multa);
-				agregar(nMulta);
-
+				muestra.add(multa);
+			
 			} //llave for grande
 
 		}//llave try
@@ -155,241 +142,59 @@ public class Modelo {
 		{
 			e.printStackTrace();
 		}
+		Collections.shuffle(muestra);
+		return muestra;
 
 
 	} //llave metodo
-
-	public String retornarreq1() throws noExisteObjetoException
+	
+	public long cargarDatosALaCola(int tamanoMuestra)
 	{
-		return "El total de comparendos son: " + datos.darTamano()+". el primer comparendo de la lista es: "
-				+ datos.darPrimero().toString() +".";
-	}
-
-	public Comparable[] copiarComparendos() throws noExisteObjetoException
-	{
-		Comparable[] comparables = new Comparable[datos.darTamano()];
-
-		for(int i = 0; i < datos.darTamano(); i++)
-		{
-			comparables[i] = datos.darNodoEnPos(i);
-		}
-		if(comparables.length > 0)
-		{
-			System.out.println("El arreglo fue creado con exito");
-
-		}
-
-		else 
-		{
-			System.out.println("fail");
-		}
-
-
-		return comparables;
-	}
-
-
-	public void shellSort(Comparable[] datos)
-	{
-
-
-		long inicio = System.currentTimeMillis();
-		int salto = datos.length/2;
-
-		while( salto != 0 )
-		{
-			boolean intercambio = true;
-
-			while(intercambio)
-			{ 
-				intercambio = false;
-				for(int i = salto; i < datos.length; i++)
-				{
-					if(datos[i-salto].compareTo(datos[i]) > 0)
-					{ 
-						Comparable temp = datos[i]; 
-						datos[i] = datos[i-salto];
-						datos[i-salto] = temp;
-						intercambio=true;
-					}
-				}
-
+		long inicio = 0, fin = -1;
+		ArrayList<Multa> muestra;
+		try {
+			muestra = (ArrayList<Multa>) cargarDatos();
+			inicio = System.currentTimeMillis();
+			for(int i = 0; i < tamanoMuestra; i++)
+			{
+				datosCola.insert(muestra.get(i));
 			}
-			salto/=2;
+			fin = System.currentTimeMillis();
+		} catch (noExisteObjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		long fin = System.currentTimeMillis();
-
-		long tiempo = fin - inicio ;
-
-
-		System.out.println("el tiempo total es de: " + tiempo );
-		System.out.println("los primeros comparendos son: ");
-		for(int j = 1; j <= 10; j++ )
-		{
-			System.out.println(j + " " + datos[j-1].toString());
-		}
-		System.out.println("---------------------------------------------------------------------");
-		System.out.println("los ultimos comparendos son: ");
-		for(int k = datos.length - 11; k < datos.length; k++)
-		{
-			System.out.println(k+1 + " " + datos[k].toString());
-		}
-
-		System.out.println("----------------------------------------------------------");
+		return fin - inicio;
 	}
-
-	public void mergeSort(Comparable datos[], int izq, int der)
+	
+	public long  cargarDatosAlHeap(int tamanoMuestra)
 	{
-		long inicio = System.currentTimeMillis();
-		if(izq < der)
-		{
-			//Encuentra el punto medio del vector.
-			int mid = (izq + der) / 2;
-
-			//Divide la primera y segunda mitad (llamada recursiva).
-			mergeSort(datos, izq, mid);
-			mergeSort(datos, mid+1, der);
-
-			//Une las mitades.
-			merge(datos, izq, mid, der);
-		}
-
-	}
-	public void merge(Comparable datos[], int izq, int mid, int der)
-	{
-		//Encuentra el tamaño de los sub-vectores para unirlos.
-		int n1 = mid - izq + 1;
-		int n2 = der - mid;
-
-		//Vectores temporales.
-		Comparable izqArray[] = new Comparable [n1];
-		Comparable derArray[] = new Comparable[n2];
-
-		//Copia los datos a los arrays temporales.
-		for (int i=0; i < n1; i++) {
-			izqArray[i] = datos[izq+i];
-		}
-		for (int j=0; j < n2; j++) {
-			derArray[j] = datos[mid + j + 1];
-		}
-		/* Une los vectorestemporales. */
-
-		//Índices inicial del primer y segundo sub-vector.
-		int i = 0, j = 0;
-
-		//Índice inicial del sub-vector arr[].
-		int k = izq;
-
-		//Ordenamiento.
-		while (i < n1 && j < n2) {
-			if (izqArray[i].compareTo(derArray[j]) < 0) {
-				datos[k] = izqArray[i];
-				i++;
-			} else {
-				datos[k] = derArray[j];
-				j++;
+		long inicio = 0, fin = -1;
+		ArrayList<Multa> muestra;
+		try {
+			muestra = (ArrayList<Multa>) cargarDatos();
+			inicio = System.currentTimeMillis();
+			for(int i = 0; i < tamanoMuestra; i++)
+			{
+				datosHeap.insert(muestra.get(i));
 			}
-			k++;
-		}//Fin del while.
-
-		/* Si quedan elementos por ordenar */
-		//Copiar los elementos restantes de leftArray[].
-		while (i < n1) {
-			datos[k] = izqArray[i];
-			i++;
-			k++;
+			fin = System.currentTimeMillis();
+		} catch (noExisteObjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		//Copiar los elementos restantes de rightArray[].
-		while (j < n2) {
-			datos[k] = derArray[j];
-			j++;
-			k++;
-		}
+		
+		return fin - inicio;
 	}
 
 
-	public void darInfoMergeSort(Comparable[] datos, int izq, int der)
+	public String retornarreq1(int tamanoMuestra) throws noExisteObjetoException
 	{
-		long inicio = System.currentTimeMillis();
-
-		mergeSort(datos, izq, der);
-
-		long fin = System.currentTimeMillis();
-
-		long time = fin - inicio;
-
-		System.out.println("el tiempo total de ejecucion es de " + time);
-
-		System.out.println("Los primeros 10 objetos del arreeglo son");
-		for(int i = 0; i < 10; i++)
-		{
-			System.out.println(datos[i].toString());
-		}
-		System.out.println("--------------------------------------------------");
-		System.out.println("Los ultimos datos son: ");
-		for(int j = datos.length-11; j < datos.length; j++)
-		{
-			System.out.println(datos[j].toString());
-		}
+		
+		
+		return "El total de comparendos son: " + datosCola.size() + ". el tiempo en cargar la cola es: " + cargarDatosALaCola(tamanoMuestra) + 
+				". El tiempo en cargar los datos al heap es de: " +  cargarDatosAlHeap(tamanoMuestra) + ". ";
 	}
 
-	public void quickSort(Comparable[] datos, int izq, int der)
-	{
-
-
-		if (izq < der) 
-		{
-			int index = particion(datos, izq, der);
-
-			quickSort(datos, izq, index-1);
-			quickSort(datos, index+1, der);
-		}
-
-
-
-	}
-	private int particion(Comparable datos[], int izq, int der) {
-	    Comparable pivote = datos[der];
-	    int i = (izq-1);
-	 
-	    for (int j = izq; j < der; j++) {
-	        if (datos[j].compareTo(pivote) <= 0) {
-	            i++;
-	 
-	            Comparable temp = datos[i];
-	            datos[i] = datos[j];
-	            datos[j] = temp;
-	        }
-	    }
-	 
-	    Comparable temp = datos[i+1];
-	    datos[i+1] = datos[der];
-	    datos[der] = temp;
-	 
-	    return i+1;
-	}
-
-	public void darDatosQuickSort(Comparable[] datos, int izq, int der)
-	{
-		long inicio = System.currentTimeMillis();
-		quickSort(datos, izq, der);
-		long fin = System.currentTimeMillis();
-		long time = fin - inicio;
-
-		System.out.println("el tiempo total de ejecucion es de " + time);
-
-		System.out.println("Los primeros 10 objetos del arreeglo son");
-		for(int i = 0; i < 10; i++)
-		{
-			System.out.println(datos[i].toString());
-		}
-		System.out.println("--------------------------------------------------");
-		System.out.println("Los ultimos datos son: ");
-		for(int j = datos.length-11; j < datos.length; j++)
-		{
-			System.out.println(datos[j].toString());
-		}
-
-	}
+	
 }//llave clase

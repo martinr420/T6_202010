@@ -144,29 +144,5 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		}
 		arreglo = temp;
 	}
-	private void desconectarNodo(Nodo<K> pNodo) throws noExisteObjetoException
-	{
-		if(tamano == 0 || pNodo == null)
-		{
-			throw new noExisteObjetoException();
-		}
-		if(pNodo.darAnterior() != null && pNodo.darSiguiente() != null)
-		{
-			pNodo.darAnterior().cambiarSiguiente(pNodo.darSiguiente());
-			pNodo.darSiguiente().cambiarAnterior(pNodo.darAnterior());
-			pNodo.desconectarAnterior();
-			pNodo.desconectarSiguiente();
-		}
-		else if(pNodo.darSiguiente() != null)
-		{
-			pNodo.darSiguiente().desconectarAnterior();
-			pNodo.desconectarSiguiente();
-		}
-		else
-		{
-			pNodo.darAnterior().desconectarSiguiente();
-			pNodo.desconectarAnterior();
-		}
-	}
-
+	
 }

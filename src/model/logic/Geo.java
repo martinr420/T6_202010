@@ -23,6 +23,10 @@ public class Geo {
 			
 			return msj;
 		}
+		public double[] darCoordenadas()
+		{
+			return coordenadas;
+		}
 	}
 
 

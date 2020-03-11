@@ -6,28 +6,18 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 {
 	private int tamano;
 	private K[] arreglo;
-	private Comparator<K> comparador;
-
+	
 	public MaxHeapCP(int capacidad)
 	{
 		tamano = 0;
 		arreglo = (K[]) new Object[capacidad + 1];
 	}
+
 	public MaxHeapCP()
 	{
-		this(1); 
+		this(1);
 	}
-
-	public MaxHeapCP(int capacidad, Comparator<K> pComparador)
-	{
-		comparador = pComparador;
-		arreglo = (K[]) new Object[capacidad + 1];
-		tamano = 0;
-	}
-	public MaxHeapCP(Comparator<K> pComparador)
-	{
-		this(1, pComparador);
-	}
+	
 	public MaxHeapCP(K[] keys)
 	{
 		tamano = keys.length;
@@ -55,11 +45,9 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		{
 			cambiarTamano(arreglo.length*2);
 		}
-
-		arreglo[++tamano] = key;
+		++tamano;
+		arreglo[tamano] = key;
 		swim(tamano);
-
-
 	}
 
 
@@ -70,6 +58,7 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		{
 			throw new noExisteObjetoException();
 		}
+		
 		return arreglo[1];
 	}
 
@@ -124,14 +113,7 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 
 	private boolean esMenor(int i, int j) 
 	{
-		if (comparador == null) 
-		{
 			return ((Comparable<K>) arreglo[i]).compareTo(arreglo[j]) < 0;
-		}
-		else 
-		{
-			return comparador.compare(arreglo[i], arreglo[j]) < 0;
-		}
 	}
 
 	private void intercambiar(int i, int j)
@@ -150,6 +132,4 @@ public class MaxHeapCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		}
 		arreglo = temp;
 	}
-
-
 }

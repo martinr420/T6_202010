@@ -31,8 +31,11 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		}
 		else
 		{
+		
+			nuevo.cambiarAnterior(ultimo);
 			ultimo.cambiarSiguiente(nuevo);
 			ultimo = nuevo;
+			tamano++;
 		}
 		// TODO Auto-generated method stub
 
@@ -46,15 +49,17 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 			throw new noExisteObjetoException();
 		}
 		Nodo<K> mayor = primero;
-		Nodo<K> actual = mayor.darSiguiente();
-
-		while(actual.hasNext())
+		Nodo<K> actual = primero;
+		while(actual!=null)
 		{
-			if(mayor.generic().compareTo(actual.generic()) < 0)
+			if(actual.generic().compareTo(mayor.generic()) > 0 )
 			{
 				mayor = actual;
 			}
+			actual = actual.darSiguiente();
 		}
+
+		
 		// TODO Auto-generated method stub
 		return mayor.generic();
 	}
@@ -67,24 +72,25 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 			throw new noExisteObjetoException();
 		}
 
-		Nodo<K> eliminar = primero;
-		Nodo<K> actual = (Nodo<K>) primero.next();
+		Nodo<K> mayor = primero;
+		Nodo<K> actual = primero;
 		
-		while(actual.hasNext())
+		while(actual != null)
 		{
-			if(eliminar.generic().compareTo(actual.generic()) < 0)
+			if(actual.generic().compareTo(mayor.generic()) > 0)
 			{
-				eliminar = actual;
+				mayor = actual;
 			}
-			actual = (Nodo<K>) actual.next();
+			actual = actual.darSiguiente();
 		}
-		eliminar.darAnterior().cambiarSiguiente(eliminar.darSiguiente());
-		eliminar.darSiguiente().cambiarAnterior(eliminar.darAnterior());
-		eliminar.desconectarSiguiente();
-		eliminar.desconectarAnterior();
+		primero = mayor.darSiguiente();
+		mayor.darSiguiente().desconectarAnterior();
+		mayor.desconectarSiguiente();
+				
+		
 
 		// TODO Auto-generated method stub
-		return eliminar.generic();
+		return mayor.generic();
 	}
 
 	@Override
@@ -92,6 +98,8 @@ public class MaxColaCP<K extends Comparable<K>> implements IMaxColaCP<K>
 		// TODO Auto-generated method stub
 		return tamano == 0;
 	}
+	
+	
 
 
 

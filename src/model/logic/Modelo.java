@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import model.data_structures.IMaxColaCP;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.Nodo;
@@ -91,7 +92,7 @@ public class Modelo {
 	{
 		List<Multa> muestra = new ArrayList<Multa>();
 
-		String path = "./data/comparendos_dei_2018_small.txt";
+		String path = "./data/comparendos_dei_2018_small.geojson";
 		JsonReader lector;
 
 
@@ -196,5 +197,79 @@ public class Modelo {
 				". El tiempo en cargar los datos al heap es de: " +  cargarDatosAlHeap(tamanoMuestra) + ". ";
 	}
 
+	public void comparendosMasAlNorteCola ( int n, String pLista)
+	{
+		
+		String[] separadas;
+		separadas = pLista.split(",");
+		
+		try {
+			ArrayList<Multa> lasMultas = new ArrayList<Multa>(n);
+			for (int i = 0; lasMultas.size() < n; i++)
+			{
+			Multa laMulta = datosCola.deleteMax();
+			
+			for (String uno: separadas)
+			{
+			if (laMulta.getVehiculo().equals(uno))
+					{
+				
+					lasMultas.add(laMulta);
+		
+				
+					}}}
+			
+			System.out.println("Infraccion  | " + "Clase de Vehiculo" + "  | " + "latitud" + "  | " +  "longitud" );
+			for (Multa multa: lasMultas)
+			{
+			System.out.println(multa.getId() + "  | " +  multa.getVehiculo() + "  | " + multa.getGeo().darCoordenadas()[0] + "  | " + multa.getGeo().darCoordenadas()[1] );
+			}
+			System.out.println("El tiempo en tardo en ejecutarse es " + System.currentTimeMillis());
+		} 
+		
+		catch (noExisteObjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void comparendosMasAlNorteHeap ( int n, String pLista)
+	{
+		
+		String[] separadas;
+		separadas = pLista.split(",");
+		
+		try {
+			ArrayList<Multa> lasMultas = new ArrayList<Multa>(n);
+			for (int i = 0; lasMultas.size() < n; i++)
+			{
+			Multa laMulta = datosHeap.deleteMax();
+			
+			for (String uno: separadas)
+			{
+			if (laMulta.getVehiculo().equals(uno))
+					{
+				
+					lasMultas.add(laMulta);
+		
+				
+					}}}
+			System.out.println("El tiempo en tardo en ejecutarse es ");
+			System.out.println("Infraccion  | " + "Clase de Vehiculo" + "  | " + "latitud" + "  | " +  "longitud" );
+			for (Multa multa: lasMultas)
+			{
+			System.out.println(multa.getId() + "  | " +  multa.getVehiculo() + "  | " + multa.getGeo().darCoordenadas()[0] + "  | " + multa.getGeo().darCoordenadas()[1] );
+			}
+			
+			System.out.println("El tiempo en tardo en ejecutarse es " + System.currentTimeMillis());
+		} 
+		
+		catch (noExisteObjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 }//llave clase

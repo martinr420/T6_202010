@@ -66,18 +66,24 @@ public class Controller {
 
 				case 1:
 					// Display option 1
-					view.displayOp1Menu();
+					view.displayOp2Menu();
+					int n = reader.nextInt();
+					view.displayOp18Menu();
+					String vehiculo = reader.next();
+					modelo.comparendosMasAlNorteCola(n, vehiculo);
 					
 					
 					
 					break;
 
 				case 2:
+					
 					view.displayOp2Menu();
-					
-					
-					
-
+					int n2 = reader.nextInt();
+					view.displayOp18Menu();
+					String vehiculo2 = reader.next();
+					modelo.comparendosMasAlNorteHeap(n2, vehiculo2);
+				
 					break;
 			
 					// Invalid option

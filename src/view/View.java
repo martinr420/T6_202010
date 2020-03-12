@@ -23,8 +23,8 @@ public class View
         System.out.println(" ||      ==== MENU ====      ||");
 
         System.out.println( " ||" +  " 0. Cargar datos   "  + "       ||");
-        System.out.println("|| mostrar los comparendos mas al norte ");
-        System.out.println("|| mostrar comparendos mas al norte con tipo de vehiculo");
+        System.out.println("|| 1. Mostrar los comparendos mas al norte con tipo de vehiculo (MaxColaCP) ");
+        System.out.println("|| 2. Mostrar comparendos mas al norte con tipo de vehiculo (MaxHeapCP) ");
         System.out.println( " **==========================**\n");
 
         // display hint
@@ -103,9 +103,16 @@ public class View
      */
     public void displayOp2Menu() {
     	
-        System.out.println( "====== Dar comparendos mas al Norte con tipo Vehi  ======");
+        System.out.println( "====== Dar comparendos mas al norte con los tipos de vehiculo ======");
+        System.out.println("Digite el tamaño de la muestra");
      
        
+    }
+    
+    
+    public void displayOp18Menu()
+    {
+    	System.out.println("Digite los tipos de vehiculo");
     }
     public void displayOp21Menu()
     {

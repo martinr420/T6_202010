@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import model.data_structures.ListaDoblementeEncadenada;
+
 import model.data_structures.Nodo;
 import model.logic.Modelo;
 import model.logic.Multa;

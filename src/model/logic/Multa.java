@@ -129,12 +129,12 @@ public class Multa implements Comparable<Multa>
 	public int compareTo(Multa pMulta)
 	{
 		
+		
 		int num = 0 ;
 		
 		if(this.geo.darCoordenadas()[0] > pMulta.getGeo().darCoordenadas()[0])
 		{
-			num = 1;
-		}
+			num = 1;		}
 		else if(this.geo.darCoordenadas()[0] < pMulta.geo.darCoordenadas()[0])
 		{
 			num = -1;
@@ -142,7 +142,6 @@ public class Multa implements Comparable<Multa>
 		
 		return num;
 	}
-
 
 }
 

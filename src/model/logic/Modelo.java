@@ -5,11 +5,7 @@ package model.logic;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,11 +13,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import model.data_structures.IMaxColaCP;
-import model.data_structures.MaxColaCP;
-import model.data_structures.MaxHeapCP;
-import model.data_structures.Nodo;
-import model.data_structures.noExisteObjetoException;
+import model.data_structures.Queue;
+import model.data_structures.RedBlackBST;
 
 /**
  * Definicion del modelo del mundo
@@ -31,70 +24,25 @@ public class Modelo {
 	/**
 	 * Atributos del modelo del mundo
 	 */
-	private MaxHeapCP<Multa> datosHeap;
-	private MaxColaCP<Multa> datosCola;
+	private RedBlackBST<Long, Multa> arbol;
 	/**
 	 * Constructor del modelo del mundo con capacidad predefinida
 	 */
 	public Modelo()
 	{
-		datosCola = new MaxColaCP<Multa>();
-		datosHeap = new MaxHeapCP<Multa>();
+		arbol = new RedBlackBST<Long, Multa>();
 	}
 
-
-
-	public MaxHeapCP<Multa> darDatosHeap()
-	{
-		return datosHeap;
-	}
-
-	public MaxColaCP<Multa> darDatosCola()
-	{
-		return datosCola;
-	}
 
 	/**
 	 * Servicio de consulta de numero de elementos presentes en el modelo 
 	 * @return numero de elementos presentes en el modelo
 	 */
-	public int sizeHeap()
+
+	private void cargarDatos() 
 	{
-		return datosHeap.size();
-	}
-
-	public int sizeCola()
-	{
-		return datosCola.size();
-	}
-
-	/**
-	 * Requerimiento de agregar dato
-	 * @param dato
-	 */
-	public void agregarAHeap(Nodo<Multa> dato)
-	{	
-		datosHeap.insert(dato.generic());
-	}
-
-	public void agregarACola(Nodo<Multa> dato)
-	{
-		datosCola.insert(dato.generic());
-	}
-
-	/**
-	 * Requerimiento buscar dato
-	 * @param dato Dato a buscar
-	 * @return dato encontrado
-	 * @throws noExisteObjetoException 
-	 */
-	public List<Multa> cargarDatos() throws noExisteObjetoException 
-	{
-		List<Multa> muestra = new ArrayList<Multa>();
-
-		String path = "./data/comparendos_dei_2018_small.geojson";
+		String path = "./data/comparendos.geojson";
 		JsonReader lector;
-
 
 		try {
 
@@ -111,11 +59,11 @@ public class Modelo {
 
 				long id = propiedades.get("OBJECTID").getAsLong();
 				String fecha = propiedades.get("FECHA_HORA").getAsString();
-				String medioDete = propiedades.getAsJsonObject().get("MEDIO_DETE").getAsString();
-				String claseVehiculo = propiedades.getAsJsonObject().get("CLASE_VEHI").getAsString();
-				String tipoServicio = propiedades.getAsJsonObject().get("TIPO_SERVI").getAsString();
+				String medioDete = propiedades.getAsJsonObject().get("MEDIO_DETECCION").getAsString();
+				String claseVehiculo = propiedades.getAsJsonObject().get("CLASE_VEHICULO").getAsString();
+				String tipoServicio = propiedades.getAsJsonObject().get("TIPO_SERVICIO").getAsString();
 				String infraccion = propiedades.getAsJsonObject().get("INFRACCION").getAsString();
-				String descripcion = propiedades.getAsJsonObject().get("DES_INFRAC").getAsString();
+				String descripcion = propiedades.getAsJsonObject().get("DES_INFRACCION").getAsString();
 				String localidad = propiedades.getAsJsonObject().get("LOCALIDAD").getAsString();
 
 
@@ -134,8 +82,8 @@ public class Modelo {
 
 				Multa multa = new Multa(id, fecha, medioDete, claseVehiculo, tipoServicio, infraccion, descripcion, localidad, geometria);
 
-				muestra.add(multa);
-			
+				arbol.put(id, multa);
+
 			} //llave for grande
 
 		}//llave try
@@ -143,133 +91,48 @@ public class Modelo {
 		{
 			e.printStackTrace();
 		}
-		Collections.shuffle(muestra);
-		return muestra;
-
-
+	
 	} //llave metodo
+
 	
-	public long cargarDatosALaCola(int tamanoMuestra)
+	public String retornarreq1()
 	{
-		long inicio = 0, fin = -1;
-		ArrayList<Multa> muestra;
-		try {
-			muestra = (ArrayList<Multa>) cargarDatos();
-			inicio = System.currentTimeMillis();
-			for(int i = 0; i < tamanoMuestra; i++)
-			{
-				datosCola.insert(muestra.get(i));
-			}
-			fin = System.currentTimeMillis();
-		} catch (noExisteObjetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return fin - inicio;
+		cargarDatos();
+		return "El total de comparendos son: " + arbol.size() + " el menor ID es: " + arbol.min() + "\n el mayor ID es: " + arbol.max();  	
 	}
 	
-	public long  cargarDatosAlHeap(int tamanoMuestra)
+	public String reque2(long pID)
 	{
-		long inicio = 0, fin = -1;
-		ArrayList<Multa> muestra;
-		try {
-			muestra = (ArrayList<Multa>) cargarDatos();
-			inicio = System.currentTimeMillis();
-			for(int i = 0; i < tamanoMuestra; i++)
-			{
-				datosHeap.insert(muestra.get(i));
-			}
-			fin = System.currentTimeMillis();
-		} catch (noExisteObjetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String msj = "";
+		
+		Multa m = arbol.get(pID);
+		
+		if(m == null) return "No hay comparendos con ese ID";
+		
+		msj += "La multa con el ID "+ pID + "es " + m.toString();
+		
+		return msj;
+	}
+	
+	public String reque3(long pMin , long pMax) throws Exception 
+	{
+		if(pMin > pMax) throw new Exception();
+		
+		String msj = "";
+		
+		Queue<Multa> q = (Queue<Multa>) arbol.valuesInRange(pMin, pMax);
+		int tam  = q.size();
+		for(int i = 1; i <= tam; i++)
+		{
+			msj += q.dequeue().toString() + "\n";
 		}
 		
-		return fin - inicio;
+		return msj;
+		
 	}
 
-
-	public String retornarreq1(int tamanoMuestra) throws noExisteObjetoException
-	{
-		
-		
-		return "El total de comparendos son: " + datosCola.size() + ". el tiempo en cargar la cola es: " + cargarDatosALaCola(tamanoMuestra) + 
-				". El tiempo en cargar los datos al heap es de: " +  cargarDatosAlHeap(tamanoMuestra) + ". ";
-	}
-
-	public void comparendosMasAlNorteCola ( int n, String pLista)
-	{
-		
-		String[] separadas;
-		separadas = pLista.split(",");
-		
-		try {
-			ArrayList<Multa> lasMultas = new ArrayList<Multa>(n);
-			for (int i = 0; lasMultas.size() < n; i++)
-			{
-			Multa laMulta = datosCola.deleteMax();
-			
-			for (String uno: separadas)
-			{
-			if (laMulta.getVehiculo().equals(uno))
-					{
-				
-					lasMultas.add(laMulta);
-		
-				
-					}}}
-			
-			System.out.println("Infraccion  | " + "Clase de Vehiculo" + "  | " + "latitud" + "  | " +  "longitud" );
-			for (Multa multa: lasMultas)
-			{
-			System.out.println(multa.getId() + "  | " +  multa.getVehiculo() + "  | " + multa.getGeo().darCoordenadas()[0] + "  | " + multa.getGeo().darCoordenadas()[1] );
-			}
-			System.out.println("El tiempo en tardo en ejecutarse es " + System.currentTimeMillis());
-		} 
-		
-		catch (noExisteObjetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 	
-	public void comparendosMasAlNorteHeap ( int n, String pLista)
-	{
-		
-		String[] separadas;
-		separadas = pLista.split(",");
-		
-		try {
-			ArrayList<Multa> lasMultas = new ArrayList<Multa>(n);
-			for (int i = 0; lasMultas.size() < n; i++)
-			{
-			Multa laMulta = datosHeap.deleteMax();
-			
-			for (String uno: separadas)
-			{
-			if (laMulta.getVehiculo().equals(uno))
-					{
-				
-					lasMultas.add(laMulta);
-		
-				
-					}}}
-			System.out.println("El tiempo en tardo en ejecutarse es ");
-			System.out.println("Infraccion  | " + "Clase de Vehiculo" + "  | " + "latitud" + "  | " +  "longitud" );
-			for (Multa multa: lasMultas)
-			{
-			System.out.println(multa.getId() + "  | " +  multa.getVehiculo() + "  | " + multa.getGeo().darCoordenadas()[0] + "  | " + multa.getGeo().darCoordenadas()[1] );
-			}
-			
-			System.out.println("El tiempo en tardo en ejecutarse es " + System.currentTimeMillis());
-		} 
-		
-		catch (noExisteObjetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+
 	
+
 }//llave clase

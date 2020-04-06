@@ -23,8 +23,8 @@ public class View
         System.out.println(" ||      ==== MENU ====      ||");
 
         System.out.println( " ||" +  " 0. Cargar datos   "  + "       ||");
-        System.out.println("|| 1. Mostrar los comparendos mas al norte con tipo de vehiculo (MaxColaCP) ");
-        System.out.println("|| 2. Mostrar comparendos mas al norte con tipo de vehiculo (MaxHeapCP) ");
+        System.out.println("|| 1. Dar comparendo con OBJECT_ID especifico");
+        System.out.println("|| 2. Mostrar comparendos con min max ID ");
         System.out.println( " **==========================**\n");
 
         // display hint
@@ -82,7 +82,8 @@ public class View
      */
     public void displayOp1Menu() 
     {
-        System.out.println( "====== Mostar comparendos mas al norte  ======");
+        System.out.println( "====== Mostar comparendos con OBJECT_ID especifico  ======");
+        System.out.println(" Digite el OBJECT_ID");
     }
 
     /**
@@ -103,10 +104,16 @@ public class View
      */
     public void displayOp2Menu() {
     	
-        System.out.println( "====== Dar comparendos mas al norte con los tipos de vehiculo ======");
-        System.out.println("Digite el tamaño de la muestra");
+        System.out.println( "====== dar comparendos enj rango ======");
+        System.out.println("Digite el min y luego el max (ejm 1 10)");
      
        
+    }
+    public void displayOp2Data(String msj)
+    {
+    	System.out.println("Los comparendos son");
+    	System.out.println(msj);
+    	System.out.println("=====================================================================");
     }
     
     

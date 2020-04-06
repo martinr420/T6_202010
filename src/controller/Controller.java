@@ -3,8 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import model.data_structures.Nodo;
-import model.data_structures.noExisteObjetoException;
 import model.logic.Modelo;
 import model.logic.Multa;
 import view.View;
@@ -48,7 +46,8 @@ public class Controller {
 	 * @throws InputMismatchException If the user inputs an incorrect number sequence.
 	 * @throws noExisteObjetoException 
 	 */
-	public void run() throws InputMismatchException, noExisteObjetoException {
+	public void run() throws InputMismatchException
+	{
 		try {
 			Scanner reader = new Scanner(System.in);
 			boolean end = false;
@@ -59,30 +58,27 @@ public class Controller {
 				switch (option) {
 
 				case 0:
-					System.out.println("digite el tamano");
-					int tamanoMuestra = reader.nextInt();
-					view.displayOp0Menu(modelo.retornarreq1(tamanoMuestra));
+					view.displayOp0Menu(modelo.retornarreq1());
 					break;
 
 				case 1:
 					// Display option 1
-					view.displayOp2Menu();
-					int n = reader.nextInt();
-					view.displayOp18Menu();
-					String vehiculo = reader.next();
-					modelo.comparendosMasAlNorteCola(n, vehiculo);
-					
-					
-					
+					view.displayOp1Menu();
+					long n = reader.nextLong();
+					view.displayOp1Data(modelo.reque2(n));
 					break;
 
 				case 2:
 					
 					view.displayOp2Menu();
-					int n2 = reader.nextInt();
-					view.displayOp18Menu();
-					String vehiculo2 = reader.next();
-					modelo.comparendosMasAlNorteHeap(n2, vehiculo2);
+					long min = reader.nextLong();
+					long max = reader.nextLong();
+	
+					try {
+						view.displayOp2Data(modelo.reque3(min, max));
+					} catch (Exception e) {
+						System.out.println("el minimo debe ser menor o igual al maximo");
+					}
 				
 					break;
 			

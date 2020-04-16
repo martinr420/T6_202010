@@ -41,7 +41,7 @@ public class Modelo {
 
 	private void cargarDatos() 
 	{
-		String path = "./data/comparendos.geojson";
+		String path = "./data/Comparendos_DEI_2018_Bogotá_D.C_small.geojson";
 		JsonReader lector;
 
 		try {

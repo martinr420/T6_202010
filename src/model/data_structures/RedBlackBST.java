@@ -359,7 +359,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> implements IArbolRo
 	public int height() {
 		return height(root);
 	}
-	private int height(Node x) {
+	public int height(Node x) {
 		if (x == null) return -1;
 		return 1 + Math.max(height(x.left), height(x.right));
 	}
@@ -464,7 +464,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> implements IArbolRo
 	 * @param  rank the order statistic
 	 * @return the key in the symbol table of given {@code rank}
 	 * @throws IllegalArgumentException unless {@code rank} is between 0 and
-	 *        <em>n</em>–1
+	 *        <em>n</em>ï¿½1
 	 */
 	public Key select(int rank) {
 		if (rank < 0 || rank >= size()) {
@@ -574,7 +574,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> implements IArbolRo
 	/***************************************************************************
 	 *  Check integrity of red-black tree data structure.
 	 ***************************************************************************/
-	private boolean check() {
+	public boolean check() {
 		if (!isBST())            System.out.println("No hay orden simeterico");
 		if (!isSizeConsistent()) System.out.println("la cuenta de sub-arboles no es consistente");
 		if (!isRankConsistent()) System.out.println("el rank no es consistente");
